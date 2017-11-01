@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <style>
+        #num{
+            border: 1px solid #d0d0d0;
+        }
+        p{
+            display: inline-block;
+            padding:0 20px;
+            border: 1px solid #eeeeee;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="num"></div>
+<ul id="list"></ul>
+
+<script>
+    $(function () {
+        $.ajax({
+            url:'http://localhost:3000/yuju',
+            type:'get',
+            dataType:"json",
+            success:function(e){
+                var a=Math.ceil(e[0]["COUNT(*)"]/2)
+                console.log(a);
+                for(var i= 0;i<a;i++){
+                    $('#num').append(`<p>${i+1}</p>`)
+                }
+                $('#num').delegate('p','click',function(){
+                    var b=$(this).html();
+                    console.log(b)
+                    $.ajax({
+                        url:'http://localhost:3000/yuju/oo',
+                        type:'POST',
+                        data:{aa:b},
+                        success:function(e){
+                            console.log(e)
+                            $('#list').html("")
+                            for(i in e){
+                                $('#list').append('<li>'+e[i].id+'</li>')
+                            }
+                        }
+                    })
+                })
+            }
+        })
+        $.ajax({
+            url:'http://localhost:3000/yuju/lp',
+            type:'get',
+            success:function(e){
+                console.log(e)
+                $('#list').html("")
+                for(i in e){
+                    $('#list').append('<li>'+e[i].id+'</li>')
+                }
+            }
+        })
+    })
+
+</script>
+</body>
+</html>
